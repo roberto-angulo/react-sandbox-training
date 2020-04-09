@@ -19,7 +19,28 @@ const MainElement = WrappedComponent => {
 
 const MainElementComponent = MainElement(Element);
 
+// Challenge authentication component
+const AuthenticationComponent = props => (
+  <div>
+    <h1>Authentication component</h1>
+
+    {props.isAuthenticated && <p>{props.dataInfo}</p>}
+  </div>
+);
+
+const AuthenticationComponentWrapper = InnerComponent => {
+  return props => (
+    <div>
+      <InnerComponent {...props} />
+    </div>
+  );
+};
+
+const AuthenticationApp = AuthenticationComponentWrapper(
+  AuthenticationComponent
+);
+
 ReactDOM.render(
-  <MainElementComponent description={"it that fine?"} />,
+  <AuthenticationApp isAuthenticated={true} dataInfo={"All data here..."} />,
   document.getElementById("root")
 );
