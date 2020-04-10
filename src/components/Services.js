@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import store from "../store";
 
 const addElementToStoreCallback = ({ elementAdded } = {}) => ({
@@ -28,15 +29,24 @@ const Services = props => (
           Nulla facilisi. Aenean dignissim scelerisque mauris a pulvinar.
         </span>
       </p>
+      {props.addingElements.element}
     </header>
 
     <form onSubmit={addElementToStore}>
-      <input type="text" id="elementAdded" />
-      <button>Submit</button>
+      <input type="text" className="form-control" id="elementAdded" />
+      <button className="btn btn-primary mt-2">Submit</button>
     </form>
   </div>
 );
 
-store.subscribe(() => console.log(store.getState()));
+/* store.subscribe(() => console.log(store.getState())); */
 
-export default Services;
+const mapStateIntoPropsComponent = state => {
+  return {
+    addingElements: state.addingElements
+  };
+};
+
+export default connect(mapStateIntoPropsComponent)(Services);
+/* 
+export default Services; */
