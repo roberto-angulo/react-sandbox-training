@@ -31,12 +31,9 @@ const Services = props => (
     </header>
 
     <form onSubmit={addElementToStore}>
-      <input type="text" id="elementAdded" />
-      <button>Submit</button>
+      <input type="text" className="form-control" id="elementAdded" />
+      <button className="btn btn-primary mt-2">Submit</button>
     </form>
   </div>
 );
-
-store.subscribe(() => console.log(store.getState()));
-
 export default Services;

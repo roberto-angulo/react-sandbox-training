@@ -1,4 +1,6 @@
 import React from "react";
+import store from "../store";
+import { connect } from "react-redux";
 /* import TemplateComponent from "../components/TemplateComponent"; */
 const About = props => (
   <header>
@@ -13,7 +15,13 @@ const About = props => (
         Aenean dignissim scelerisque mauris a pulvinar.
       </span>
     </p>
+    {props.elementAdded && <p>{props.elementAdded}</p>}
   </header>
 );
-/* const AboutComponent = TemplateComponent( About ); */
-export default About;
+store.subscribe(() => console.log(store.getState()));
+
+const mapStateIntoPropsComponent = state => ({
+  elementAdded: state.elementAdded
+});
+
+export default connect(mapStateIntoPropsComponent)(About);
