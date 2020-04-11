@@ -1,17 +1,28 @@
 import React from "react";
+import { connect } from "react-redux";
 import store from "../store";
+import Template from "./Template";
 
-const addElementToStoreCallback = ({ elementAdded } = {}) => ({
+const addElementToStoreCallback = (element = {}) => ({
   type: "ADDING_ELEMENT",
-  elementAdded
+  element
 });
 
 const addElementToStore = event => {
   event.preventDefault();
+  const domElements = event.target.elements;
 
-  const elementAdded = event.target.elements.elementAdded.value;
+  store.dispatch(
+    addElementToStoreCallback({
+      name: domElements.elementAddedName.value,
+      amount: domElements.elementAddedAmount.value,
+      date: domElements.elementAddedDate.value
+    })
+  );
 
-  store.dispatch(addElementToStoreCallback({ elementAdded }));
+  domElements.elementAddedName.value = "";
+  domElements.elementAddedAmount.value = "";
+  domElements.elementAddedDate.value = "";
 };
 
 const Services = props => (
@@ -21,22 +32,48 @@ const Services = props => (
       <p>
         <strong className="d-block">Services description:</strong>
         <span>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed
-          consequat urna. Nunc convallis a ante ac bibendum. Aenean cursus
-          varius vestibulum. Vestibulum ante ipsum primis in faucibus orci
-          luctus et ultrices posuere cubilia Curae; Donec a eleifend ipsum.
-          Nulla facilisi. Aenean dignissim scelerisque mauris a pulvinar.
+          <ol className="pl-0 mt-2">
+            {props.addingElements.element.map(currentElement => (
+              <Template key={currentElement.name} {...currentElement} />
+            ))}
+          </ol>
         </span>
       </p>
     </header>
 
     <form onSubmit={addElementToStore}>
-      <input type="text" id="elementAdded" />
-      <button>Submit</button>
+      <div className="form-group">
+        <label>
+          <input type="text" className="form-control" id="elementAddedName" />
+        </label>
+      </div>
+
+      <div className="form-group">
+        <label>
+          <input
+            type="number"
+            className="form-control"
+            id="elementAddedAmount"
+          />
+        </label>
+      </div>
+
+      <div className="form-group">
+        <label>
+          <input type="date" className="form-control" id="elementAddedDate" />
+        </label>
+      </div>
+      <button className="btn btn-primary mt-2">Submit</button>
     </form>
   </div>
 );
 
-store.subscribe(() => console.log(store.getState()));
+/* store.subscribe(() => console.log(store.getState())); */
 
-export default Services;
+const mapStateIntoPropsComponent = state => {
+  return {
+    addingElements: state.addingElements
+  };
+};
+
+export default connect(mapStateIntoPropsComponent)(Services);
